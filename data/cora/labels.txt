@@ -1,0 +1,7 @@
+1	Case_Based
+2	Genetic_Algorithms
+3	Neural_Networks
+4	Probabilistic_Methods
+5	Reinforcement_Learning
+6	Rule_Learning
+7	Theory
