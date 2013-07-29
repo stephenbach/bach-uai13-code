@@ -2,18 +2,18 @@
 clear
 
 % add BPTF to path, just in case
-addpath('~/Code/MATLAB/bptf');
-addpath('~/Code/MATLAB/bptf/lib');
+addpath('export_bptf');
+addpath('export_bptf/lib');
 
 nfolds = 10;
 stats = zeros(nfolds,2);
 for f=1:nfolds
 	
 	% load the data from file
-	x_tr_o = load(sprintf('ratings/jester-1-tr-obs-%d.txt', f-1));
-	x_tr_u = load(sprintf('ratings/jester-1-tr-uno-%d.txt', f-1));
-	x_te_o = load(sprintf('ratings/jester-1-te-obs-%d.txt', f-1));
-	x_te_u = load(sprintf('ratings/jester-1-te-uno-%d.txt', f-1));
+	x_tr_o = load(sprintf('../../../data/jester/ratings/jester-1-tr-obs-%d.txt', f-1));
+	x_tr_u = load(sprintf('../../../data/jester/ratings/jester-1-tr-uno-%d.txt', f-1));
+	x_te_o = load(sprintf('../../../data/jester/ratings/jester-1-te-obs-%d.txt', f-1));
+	x_te_u = load(sprintf('../../../data/jester/ratings/jester-1-te-uno-%d.txt', f-1));
 	
 	% convert to sparse format
 	X_tr = spTensor([spconvert([x_tr_o ; x_tr_u]) ; spconvert(x_te_o)]);
@@ -42,3 +42,5 @@ for f=1:nfolds
 	fprintf('BPMF: MSE=%.4f, MAE=%.4f\n', stats(f,1), stats(f,2));
 	
 end
+
+exit

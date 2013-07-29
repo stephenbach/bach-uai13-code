@@ -38,6 +38,8 @@ import edu.umd.cs.psl.util.database.Queries
 
 
 /*** CONFIGURATION PARAMETERS ***/
+def modelType = args[0];
+sq = (!modelType.equals("linear") ? true : false)
 
 def dataPath = "./data/jester/"
 
@@ -45,12 +47,11 @@ Logger log = LoggerFactory.getLogger(this.class)
 ConfigManager cm = ConfigManager.getManager();
 ConfigBundle cb = cm.getBundle("jester");
 
-def defPath = System.getProperty("java.io.tmpdir") + "/jester"
+def defPath = System.getProperty("java.io.tmpdir") + "/psl-jester"
 def dbpath = cb.getString("dbpath", defPath)
 DataStore data = new RDBMSDataStore(new H2DatabaseDriver(Type.Disk, dbpath, true), cb)
 folds = 10
 
-def sq = cb.getBoolean("squared", true);
 def simThresh = cb.getDouble("simThresh", 0.5);
 
 ExperimentConfigGenerator configGenerator = new ExperimentConfigGenerator("jester");
@@ -59,10 +60,11 @@ ExperimentConfigGenerator configGenerator = new ExperimentConfigGenerator("jeste
  * SET MODEL TYPES
  *
  * Options:
- * "quad" HLEF
- * "bool" MLN
+ * "quad" HL-MRF-Q
+ * "linear" HL-MRF-L
+ * "bool" MRF
  */
-configGenerator.setModelTypes(["quad"]);
+configGenerator.setModelTypes([modelType]);
 
 /*
  * SET LEARNING ALGORITHMS
@@ -125,12 +127,11 @@ Map<CompatibilityKernel,Weight> initWeights = new HashMap<CompatibilityKernel, W
 for (CompatibilityKernel k : Iterables.filter(m.getKernels(), CompatibilityKernel.class))
 	initWeights.put(k, k.getWeight());
 
-
 /*** LOAD DATA ***/
 
 log.info("Loading data ...");
 
-
+List<ConfigBundle> configs = configGenerator.getConfigs();
 Map<ConfigBundle,ArrayList<Double>> expResults = new HashMap<String,ArrayList<Double>>();
 for (ConfigBundle config : configs) {
 	expResults.put(config, new ArrayList<Double>(folds));
@@ -384,7 +385,7 @@ for (int fold = 0; fold < folds; fold++) {
 			comparator.setMetric(metrics.get(i))
 			score[i] = comparator.compare(rating)
 		}
-		log.warn("Fold {} : {} : MSE {} : MAE {}", fold, configName, score[0], score[1]);
+		log.info("Fold {} : {} : MSE {} : MAE {}", fold, configName, score[0], score[1]);
 		expResults.get(config).add(fold, score);
 		predDB.close();
 		groundTruthDB.close()
@@ -392,12 +393,12 @@ for (int fold = 0; fold < folds; fold++) {
 	trainDB.close()
 }
 
-log.warn("\n\nRESULTS\n");
+log.info("\n\nRESULTS\n");
 for (ConfigBundle config : configs) {
 	def configName = config.getString("name", "")
 	def scores = expResults.get(config);
 	for (int fold = 0; fold < folds; fold++) {
 		def score = scores.get(fold)
-		log.warn("{} \t{}\t{}\t{}", configName, fold, score[0], score[1]);
+		log.info("{} \t{}\t{}\t{}", configName, fold, score[0], score[1]);
 	}
 }

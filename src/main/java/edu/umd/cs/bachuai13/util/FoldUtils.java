@@ -50,7 +50,7 @@ class FoldUtils {
 	public static List<Set<GroundTerm>> generateSnowballSplit(DataStore data, Partition observedData,
 			Partition groundTruth, Partition train, Partition test, Partition trainLabels, Partition testLabels,
 			Set<DatabaseQuery> queries,	Set<Variable> keys, int targetSize, Predicate edge, double explore) {
-		log.debug("Splitting data from " + observedData + " into clusters of target size " + targetSize +
+		log.info("Splitting data from " + observedData + " into clusters of target size " + targetSize +
 				" into new partitions " + train +" and " + test);
 
 		Database db = data.getDatabase(observedData);
@@ -73,7 +73,7 @@ class FoldUtils {
 		nodes.remove(nextTest);
 		trainList.add(nextTrain);
 		testList.add(nextTest);
-		log.debug("Started snowball sampling with train seed {}, test {}", nextTrain, nextTest);
+		log.info("Started snowball sampling with train seed {}, test {}", nextTrain, nextTest);
 
 		List<GroundTerm> frontierTrain = new ArrayList<GroundTerm>();
 		List<GroundTerm> frontierTest = new ArrayList<GroundTerm>();
@@ -117,7 +117,7 @@ class FoldUtils {
 		for (GroundTerm term : trainList) hcb.append(term);
 		for (GroundTerm term : testList) hcb.append(term);
 
-		log.debug("Hashcode of snowball split: {}", hcb.toHashCode());
+		log.info("Hashcode of snowball split: {}", hcb.toHashCode());
 		
 		return processSplits(data, observedData, groundTruth, train, test, trainLabels, testLabels, queries, keys, keyMap);
 	}
@@ -162,7 +162,7 @@ class FoldUtils {
 			Partition observedData, Partition groundTruth, Partition train,
 			Partition test, Partition trainLabels, Partition testLabels, Set<DatabaseQuery> queries,
 			Set<Variable> keys, double filterRatio) {
-		log.debug("Splitting data from " + observedData + " with ratio " + trainTestRatio +
+		log.info("Splitting data from " + observedData + " with ratio " + trainTestRatio +
 				" into new partitions " + train +" and " + test);
 
 		Database db = data.getDatabase(observedData, groundTruth);
@@ -199,7 +199,7 @@ class FoldUtils {
 			hcb.append(keyList.get(i));
 		}
 
-		log.debug("Found {} unique keys, split hashcode: {}", keyMap.size(), hcb.toHashCode());
+		log.info("Found {} unique keys, split hashcode: {}", keyMap.size(), hcb.toHashCode());
 		db.close();
 
 		return processSplits(data, observedData, groundTruth, train, test, trainLabels, testLabels, queries, keys, keyMap);
@@ -221,8 +221,7 @@ class FoldUtils {
 		}
 
 		Database db = data.getDatabase(observedData);
-		log.debug("Assigned " + splits.get(0).size() + " in train partition and " + splits.get(1).size() + " in test");
-		//log.debug("Found " + keyMap.size() + " primary keys.")
+		log.info("Assigned " + splits.get(0).size() + " in train partition and " + splits.get(1).size() + " in test");
 
 		Partition [] partitions = {train, test};
 		
@@ -345,7 +344,7 @@ class FoldUtils {
 			hcb.append(i);
 		}
 		
-		log.debug("Split hashcode {}", hcb.toHashCode());
+		log.info("Split hashcode {}", hcb.toHashCode());
 		
 		return groundings;
 	}

@@ -62,7 +62,7 @@ end
 
 %% sig test all vs best
 
-threshold = 0.01;
+threshold = 0.05;
 
 for i = 1:length(methods)
     sigPos(i) = ttest2(allPos{bestPos}, allPos{i}, threshold);

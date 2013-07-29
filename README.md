@@ -22,6 +22,11 @@ Prerequisites
 This software depends on Java 6 and Maven 3 (http://maven.apache.org). Matlab is also
 required to process the results.
 
+To run Bayesian probabilistic matrix factorization for the preference-prediction
+experiment, you must download and compile the Bayesian probabilistic tensor
+factorization package (http://www.cs.cmu.edu/~lxiong/bptf/bptf.html) and place
+the export_bptf directory in src/main/matlab.
+
 PSL Library
 -----------
 The algorithms for these experiments are implemented in the PSL library, version 1.1
@@ -29,7 +34,7 @@ The algorithms for these experiments are implemented in the PSL library, version
 
 Executing
 ---------
-runAll.sh will run all experiments.
+Each experiment from the paper can be run from one of the shell scripts in the root directory.
 
 Data
 ====
@@ -168,9 +173,9 @@ Data set of ratings of jokes (http://goldberg.berkeley.edu/jester-data/).
 
 The original data (data/jester/ratings/jester-1.csv and data/jester/joketext/joketext.txt) are
 parsed into the 50/50 test/train splits with 50% ratings observed and unobserved using
-data/jester/ratings/parse.py and data/jester/computeSim.py. It is not necessary to re-run these scripts.
-The users to model during training and testing are listed in data/jester/users-te-1000.txt and
-data/jester/users-tr-1000.txt.
+data/jester/ratings/parse.py and data/jester/joketext/computeSim.py. It is not necessary to
+re-run these scripts. The users to model during training and testing are listed in
+data/jester/users-te-1000.txt and data/jester/users-tr-1000.txt.
 
 Please cite the original data set as
 

@@ -74,7 +74,7 @@ end
 
 %% sig test all vs best
 
-threshold = 0.01;
+threshold = 0.05;
 for k = 1:length(files)
     for i = 1:length(methods)
         sigPrec(k,i) = ttest2(allPrec{k}{bestPrec(k)}, allPrec{k}{i}, threshold);

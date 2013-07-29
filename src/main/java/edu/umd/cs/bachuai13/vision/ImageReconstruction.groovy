@@ -36,8 +36,6 @@ import edu.umd.cs.psl.model.argument.UniqueID
 import edu.umd.cs.psl.model.argument.Variable
 import edu.umd.cs.psl.model.kernel.CompatibilityKernel
 import edu.umd.cs.psl.model.parameters.Weight
-//import edu.umd.cs.psl.application.learning.weight.random.GroundIncompatibilityMetropolisRandOM;
-//import edu.umd.cs.psl.application.learning.weight.random.HardEMRandOM2
 
 
 Logger log = LoggerFactory.getLogger(this.class)
@@ -52,17 +50,21 @@ numTraining = 100
 // number of testing faces
 numTesting = 50
 
-dataset = "caltech"
+def dataSet = args[0];
 
-if (args.length >= 2) {
-	if (args[0] == "bottom") {
+if (!dataSet.equals("olivetti") && !dataSet.equals("caltech")) {
+	throw new IllegalArgumentException("Unrecognized data set. Options are 'olivetti' and 'caltech.'");
+}
+
+if (args.length >= 3) {
+	if (args[1] == "bottom") {
 		testLeft = false
 		log.info("Testing on bottom of face")
 	} else {
 		testLeft = true
 		log.info("Testing on left of face")
 	}
-	if (args[1] == "half") {
+	if (args[2] == "half") {
 		trainOnRandom = false
 		log.info("Training on given half of face")
 	} else {
@@ -80,9 +82,6 @@ def expSetup = (testLeft? "left" : "bottom") + "-" + (trainOnRandom? "rand" : "s
  * "MLE" (MaxLikelihoodMPE)
  * "MPLE" (MaxPseudoLikelihood)
  * "MM" (MaxMargin)
- * "FirstOrderRandOM" (FirstOrderMetropolisRandOM)
- * "IncompatibilityRandOM" (IncompatibilityMetropolisRandOM)
- * "GroundRandOM" (GroundMetropolisRandOM)
  */
 methods = ["MLE"];
 
@@ -94,7 +93,7 @@ vpStepSizes = [5]
 ConfigManager cm = ConfigManager.getManager()
 ConfigBundle baseConfig = cm.getBundle("vision")
 
-boolean sq = false
+boolean sq = true
 
 /*
  * DEFINES EXPERIMENT CONFIGURATIONS
@@ -125,19 +124,11 @@ for (String method : methods) {
 }
 
 /*
- * PRINTS EXPERIMENT CONFIGURATIONS
- */
-for (int methodIndex = 0; methodIndex < methodNames.size(); methodIndex++)
-	System.out.println("Config for " + methodNames.get(methodIndex) + "\n" + methodConfigs.get(methodIndex));
-
-/*
  * INITIALIZES DATASTORE AND MODEL
  */
-//def defaultPath = System.getProperty("java.io.tmpdir") + "/"
-def defaultPath = "/scratch0/bert-uai13/"
-String dbpath = baseConfig.getString("dbpath", defaultPath + "psl" + dataset)
+def defaultPath = System.getProperty("java.io.tmpdir") + "/"
+String dbpath = baseConfig.getString("dbpath", defaultPath + "psl-" + dataSet)
 DataStore data = new RDBMSDataStore(new H2DatabaseDriver(Type.Disk, dbpath, true), baseConfig)
-//DataStore data = new RDBMSDataStore(new H2DatabaseDriver(Type.Memory, dbpath, true), baseConfig)
 
 PSLModel m = new PSLModel(this, data)
 
@@ -253,7 +244,7 @@ for (Partition part : [trainObs, testObs]) {
 	readDB.close()
 }
 
-ArrayList<double []> images = ImagePatchUtils.loadImages(dataDir + "/" + dataset + "01.txt", width, height)
+ArrayList<double []> images = ImagePatchUtils.loadImages(dataDir + "/" + dataSet + "01.txt", width, height)
 // create list of train images and test images
 ArrayList<double []> trainImages = new ArrayList<double[]>()
 ArrayList<double []> testImages = new ArrayList<double[]>()
@@ -354,7 +345,7 @@ for (int methodIndex = 0; methodIndex < methodNames.size(); methodIndex++) {
 	MPEInference mpe = new MPEInference(m, testDB, baseConfig)
 	FullInferenceResult result = mpe.mpeInference()
 	System.out.println("Objective: " + result.getTotalWeightedIncompatibility())
-	DataOutputter.outputPredicate("output/vision/"+ dataset + "-" + expSetup + "-" + methodNames.get(methodIndex) + ".txt" , testDB, pixelBrightness, ",", true, "index,image")
+	DataOutputter.outputPredicate("output/vision/"+ dataSet + "-" + expSetup + "-" + methodNames.get(methodIndex) + ".txt" , testDB, pixelBrightness, ",", true, "index,image")
 	testDB.close()
 
 	/*
