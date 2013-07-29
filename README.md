@@ -166,6 +166,12 @@ Jester
 ------
 Data set of ratings of jokes (http://goldberg.berkeley.edu/jester-data/).
 
+The original data (data/jester/ratings/jester-1.csv and data/jester/joketext/joketext.txt) are
+parsed into the 50/50 test/train splits with 50% ratings observed and unobserved using
+data/jester/ratings/parse.py and data/jester/computeSim.py. It is not necessary to re-run these scripts.
+The users to model during training and testing are listed in data/jester/users-te-1000.txt and
+data/jester/users-tr-1000.txt.
+
 Please cite the original data set as
 
 	@article{goldberg:ir01,

@@ -8,10 +8,10 @@ njokes = 100
 nusers = 1000
 if len(sys.argv) > 1:
 	nusers = int(sys.argv[1])
-nround = 1
+nround = 10
 if len(sys.argv) > 2:
 	nround = int(sys.argv[2])
-pctobs = 0.25
+pctobs = 0.5
 if len(sys.argv) > 3:
 	pctobs = float(sys.argv[3])
 nobs = int(pctobs * njokes * nusers)
