@@ -19,8 +19,8 @@ Instructions
 
 Prerequisites
 -------------
-This software depends on Java 6 and Maven 3 (http://maven.apache.org). Matlab is also
-required to process the results.
+This software depends on Java 6 and Maven 3 (http://maven.apache.org). Matlab and
+Python (>=2.7) are also required to process the results.
 
 To run Bayesian probabilistic matrix factorization for the preference-prediction
 experiment, you must download and compile the Bayesian probabilistic tensor
