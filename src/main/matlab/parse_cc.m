@@ -34,10 +34,6 @@ for k = 1:length(files)
             rec = str2num(matches{5});
             f1 = str2num(matches{6});
             
-            % uncomment to use all methods
-            %             if ~ismember(method, methods)
-            %                 methods(end+1) = {method};
-            %             end
             i = find(strcmp(method, methods));
             
             if ~isempty(i)

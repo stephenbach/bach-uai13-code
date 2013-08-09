@@ -5,6 +5,8 @@ clear
 addpath('export_bptf');
 addpath('export_bptf/lib');
 
+output = fopen('../../../output/jester.bpmf.out', 'w');
+
 nfolds = 10;
 stats = zeros(nfolds,2);
 for f=1:nfolds
@@ -26,12 +28,12 @@ for f=1:nfolds
 	pn = 50e-3;
 	learnrate = 1e-3;
 	alpha = 2;
+	fprintf('test')
 	
 	% init factorization using PMF gradient descent
 	pars = struct('ridge',pn,'learn_rate',learnrate,'range',[0,1],'max_iter',maxiter);
 	[U, V, dummy, r_pmf] = PMF_Grad(X_tr, X_te, d, pars);
-	fprintf('PMF: %.4f\n', r_pmf);
-
+	fprintf(output, 'PMF: %.4f\n', r_pmf);
 	% run BPMF
 	pars = struct('max_iter',maxiter,'n_sample',nsamp,'save_sample',false);
 	[Us, Vs] = BPMF(X_tr, X_te, d, alpha, [], {U,V}, pars);
@@ -39,8 +41,9 @@ for f=1:nfolds
 	diff = Y.vals - X_te.vals;
 	stats(f,1) = mean(diff(:).^2);
 	stats(f,2) = mean(abs(diff(:)));
-	fprintf('BPMF: MSE=%.4f, MAE=%.4f\n', stats(f,1), stats(f,2));
+	fprintf(output, 'BPMF: MSE=%.4f, MAE=%.4f\n', stats(f,1), stats(f,2));
 	
 end
 
+fclose(output);
 exit

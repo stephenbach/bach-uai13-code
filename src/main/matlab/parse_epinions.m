@@ -3,13 +3,10 @@ clear;
 methods = {'quad-mle-100-5.0', 'quad-mple-100-5.0','quad-mm-0.1-none-none-false',...
     'linear-mle-100-5.0', 'linear-mple-100-5.0', 'linear-mm-0.1-none-none-false', ...
     'bool-mle-100-5.0', 'bool-mple-100-5.0', 'bool-mm-0.1-none-none-false'};
-%methods = {};
 
 allPos = {};
 allNeg = {};
 allROC = {};
-
-%% read linear
 
 files = {'../../../output/epinions.hlmrf-q.out'
 	'../../../output/epinions.hlmrf-l.out'
@@ -28,10 +25,6 @@ for k = 1:length(files)
             neg = str2num(matches{4});
             roc = str2num(matches{5});
 
-            % uncomment to use all methods
-%             if ~ismember(method, methods)
-%                 methods(end+1) = {method};
-%             end
             i = find(strcmp(method, methods));
             
             if ~isempty(i)
@@ -42,8 +35,6 @@ for k = 1:length(files)
         end
     end
 end
-
-%% read quad
 
 %% compute means
 
