@@ -86,7 +86,7 @@ def expSetup = (testLeft? "left" : "bottom") + "-" + (trainOnRandom? "rand" : "s
 methods = ["MLE"];
 
 /* MLE/MPLE options */
-vpStepCounts = [200]
+vpStepCounts = [100]
 vpStepSizes = [5]
 
 
