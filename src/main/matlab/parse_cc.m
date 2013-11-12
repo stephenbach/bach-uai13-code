@@ -70,13 +70,13 @@ end
 
 %% sig test all vs best
 
-threshold = 0.05;
+threshold = 0.01;
 for k = 1:length(files)
     for i = 1:length(methods)
-        sigPrec(k,i) = ttest2(allPrec{k}{bestPrec(k)}, allPrec{k}{i}, threshold);
-        sigRec(k,i) = ttest2(allRec{k}{bestRec(k)}, allRec{k}{i}, threshold);
-        sigF1(k,i) = ttest2(allF1{k}{bestF1(k)}, allF1{k}{i}, threshold);
-        sigAcc(k,i) = ttest2(allAcc{k}{bestAcc(k)}, allAcc{k}{i}, threshold);
+        sigPrec(k,i) = ttest(allPrec{k}{bestPrec(k)}, allPrec{k}{i}, 'Alpha', threshold);
+        sigRec(k,i) = ttest(allRec{k}{bestRec(k)}, allRec{k}{i}, 'Alpha', threshold);
+        sigF1(k,i) = ttest(allF1{k}{bestF1(k)}, allF1{k}{i}, 'Alpha', threshold);
+        sigAcc(k,i) = ttest(allAcc{k}{bestAcc(k)}, allAcc{k}{i}, 'Alpha', threshold);
     end
 end
 
@@ -98,7 +98,7 @@ for i = 1:length(latexNames)
     
   for k = 1:length(files)
 
-    if sigPrec(k,i)
+    if bestPrec(k) ~= i && sigPrec(k,i)
         str = sprintf('%s & %0.3f', str, meanPrec(k,i));
     else
         str = sprintf('%s & \\textbf{%0.3f}', str, meanPrec(k,i));

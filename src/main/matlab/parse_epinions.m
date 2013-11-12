@@ -53,12 +53,12 @@ end
 
 %% sig test all vs best
 
-threshold = 0.05;
+threshold = 0.01;
 
 for i = 1:length(methods)
-    sigPos(i) = ttest2(allPos{bestPos}, allPos{i}, threshold);
-    sigNeg(i) = ttest2(allNeg{bestNeg}, allNeg{i}, threshold);
-    sigROC(i) = ttest2(allROC{bestROC}, allROC{i}, threshold);
+    sigPos(i) = ttest(allPos{bestPos}, allPos{i}, 'Alpha', threshold);
+    sigNeg(i) = ttest(allNeg{bestNeg}, allNeg{i}, 'Alpha', threshold);
+    sigROC(i) = ttest(allROC{bestROC}, allROC{i}, 'Alpha', threshold);
 end
 
 %% print latex
@@ -75,19 +75,19 @@ fprintf('\\midrule\n')
 for i = 1:length(latexNames)
     str = latexNames{i}; 
     
-    if sigROC(i)
+    if bestROC ~= i && sigROC(i)
         str = sprintf('%s & %0.3f', str, meanROC(i));
     else
         str = sprintf('%s & \\textbf{%0.3f}', str, meanROC(i));
     end
     
-    if sigPos(i)
+    if bestPos ~= i && sigPos(i)
         str = sprintf('%s & %0.3f', str, meanPos(i));
     else
         str = sprintf('%s & \\textbf{%0.3f}', str, meanPos(i));
     end
         
-    if sigNeg(i)
+    if bestNeg ~= i && sigNeg(i)
         str = sprintf('%s & %0.3f', str, meanNeg(i));
     else
         str = sprintf('%s & \\textbf{%0.3f}', str, meanNeg(i));

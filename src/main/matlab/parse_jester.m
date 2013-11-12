@@ -67,11 +67,11 @@ end
 
 %% sig test all vs best
 
-threshold = 0.05;
+threshold = 0.01;
 
 for i = 1:length(methods)+1
-    sigMSE(i) = ttest2(allMSE{bestMSE}, allMSE{i}, threshold);
-    sigMAE(i) = ttest2(allMAE{bestMAE}, allMAE{i}, threshold);
+    sigMSE(i) = ttest(allMSE{bestMSE}, allMSE{i}, 'Alpha', threshold);
+    sigMAE(i) = ttest(allMAE{bestMAE}, allMAE{i}, 'Alpha', threshold);
 end
 
 %% print latex
@@ -88,13 +88,13 @@ fprintf('\\midrule\n')
 for i = 1:length(latexNames)
     str = latexNames{i}; 
     
-    if sigMSE(i)
+    if bestMSE ~= i && sigMSE(i)
         str = sprintf('%s & %0.4f', str, meanMSE(i));
     else
         str = sprintf('%s & \\textbf{%0.4f}', str, meanMSE(i));
     end
     
-    if sigMAE(i)
+    if bestMAE ~= i && sigMAE(i)
         str = sprintf('%s & %0.4f', str, meanMAE(i));
     else
         str = sprintf('%s & \\textbf{%0.4f}', str, meanMAE(i));
