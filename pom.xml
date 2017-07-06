@@ -24,7 +24,7 @@
 			</releases>
 			<id>psl-releases</id>
 			<name>PSL Releases</name>
-			<url>https://scm.umiacs.umd.edu/maven/lccd/content/repositories/psl-releases/</url>
+			<url>http://maven.linqs.org/maven/repositories/psl-releases/</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
@@ -35,7 +35,7 @@
 			</releases>
 			<id>psl-thirdparty</id>
 			<name>PSL Third Party</name>
-			<url>https://scm.umiacs.umd.edu/maven/lccd/content/repositories/psl-thirdparty/</url>
+			<url>http://maven.linqs.org/maven/repositories/psl-thirdparty/</url>
 			<layout>default</layout>
 		</repository>
 	</repositories>
